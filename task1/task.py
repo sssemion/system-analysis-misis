@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from cgi import parse
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -12,7 +13,7 @@ class InvalidTree(Exception):
 
 @dataclass
 class Node:
-    value: Any
+    value: str | int
     children: list[Node] = field(default_factory=list)
 
     def __hash__(self):
@@ -24,10 +25,7 @@ def print_tree(node: Node, _indent: int = 0) -> None:
         print_tree(ch, _indent + 1)
 
 
-def main(path: str) -> Node:
-    with open(path) as fd:
-        nodes = json.load(fd)['nodes']
-
+def parse_tree(nodes: dict[str | int]) -> Node:
     cache = dict[str, Node]()
     root_cache = dict[Node, bool]()
     for k, children in nodes.items():
@@ -47,7 +45,14 @@ def main(path: str) -> Node:
     elif not roots:
         raise InvalidTree('Цикличное дерево')
 
-    root = roots[0]
+    return roots[0]
+
+
+def main(path: str) -> Node:
+    with open(path) as fd:
+        nodes = json.load(fd)['nodes']
+
+    root = parse_tree(nodes)
     print_tree(root)
     return root
 
