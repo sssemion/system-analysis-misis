@@ -14,15 +14,17 @@ class RelType(Enum):
     R5 = 5  # отношение сопряжения на одном уровне
 
 
-def main(csv_string: str) -> str:
+def parse_tree_from_csv(csv_string: str) -> Node:
     reader = csv.reader(csv_string.splitlines(), delimiter=',')
     edges = defaultdict[str, list](list)
 
     for parent, child in reader:
         edges[parent].append(child)
 
-    root = parse_tree(dict(edges))
+    return parse_tree(dict(edges))
 
+
+def calc_extension_lengths(root: Node) -> dict[Node, dict[RelType, int]]:
     extension_lengths = defaultdict[Node, dict[RelType, int]](lambda: dict.fromkeys(RelType, 0))
     level_nodes = defaultdict[int, list[Node]](list)
 
@@ -42,6 +44,12 @@ def main(csv_string: str) -> str:
     for depth, nodes in level_nodes.items():
         for node in nodes:
             extension_lengths[node][RelType.R5] = len(nodes) - 1
+    return extension_lengths
+
+
+def main(csv_string: str) -> str:
+    root = parse_tree_from_csv(csv_string)
+    extension_lengths = calc_extension_lengths(root)
 
     output = StringIO()
     writer = csv.writer(output)
@@ -55,7 +63,7 @@ INPUT_SAMPLE = '''
 1,3
 3,4
 3,5
-'''
+'''.strip()
 
 if __name__ == '__main__':
-    print(main(INPUT_SAMPLE.strip()))
+    print(main(INPUT_SAMPLE))
