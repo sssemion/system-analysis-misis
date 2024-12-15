@@ -25,8 +25,8 @@ def print_tree(node: Node, _indent: int = 0) -> None:
         print_tree(ch, _indent + 1)
 
 
-def parse_tree(nodes: dict[str | int]) -> Node:
-    cache = dict[str, Node]()
+def parse_tree(nodes: dict[str | int, list[str | int]]) -> Node:
+    cache = dict[str | int, Node]()
     root_cache = dict[Node, bool]()
     for k, children in nodes.items():
         if (node := cache.get(k)) is None:
