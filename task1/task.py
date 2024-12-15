@@ -23,7 +23,7 @@ def print_tree(node: Node, _indent: int = 0) -> None:
         print_tree(ch, _indent + 1)
 
 
-def parse_tree(path: str) -> None:
+def main(path: str) -> None:
     with open(path) as fd:
         nodes = json.load(fd)['nodes']
 
@@ -50,11 +50,11 @@ def parse_tree(path: str) -> None:
     print_tree(root)
 
 
-def main():
+def cli():
     parser = argparse.ArgumentParser()
     parser.add_argument('filename')
     args = parser.parse_args()
-    parse_tree(args.filename)
+    main(args.filename)
 
 if __name__ == '__main__':
-    main()
+    cli()
