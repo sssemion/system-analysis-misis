@@ -9,6 +9,7 @@ from typing import Any
 class InvalidTree(Exception):
     pass
 
+
 @dataclass
 class Node:
     value: Any
@@ -23,7 +24,7 @@ def print_tree(node: Node, _indent: int = 0) -> None:
         print_tree(ch, _indent + 1)
 
 
-def main(path: str) -> None:
+def main(path: str) -> Node:
     with open(path) as fd:
         nodes = json.load(fd)['nodes']
 
@@ -48,6 +49,7 @@ def main(path: str) -> None:
 
     root = roots[0]
     print_tree(root)
+    return root
 
 
 def cli():
@@ -55,6 +57,7 @@ def cli():
     parser.add_argument('filename')
     args = parser.parse_args()
     main(args.filename)
+
 
 if __name__ == '__main__':
     cli()
