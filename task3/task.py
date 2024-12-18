@@ -7,7 +7,6 @@ def task(csv_string: str) -> float:
     root = parse_tree_from_csv(csv_string)
     ext_lengths = calc_extension_lengths(root)
     n = len(ext_lengths)
-    k = len(RelType)
 
     entropy = 0
 
